@@ -1101,7 +1101,14 @@ endfunction
 " a leading space after opening bracket if inserting at head, unless there
 " already is one.
 function! sexp#insert_at_list_terminal(end)
-    let pos = s:move_to_nearest_bracket(a:end)
+    let [_b, line, col, _o] = getpos('.')
+    let char = getline(line)[col - 1]
+
+    if (a:end && char =~# s:closing_bracket) || (!a:end && char =~# s:opening_bracket)
+      let pos = [0, line, col, 0]
+    else
+      let pos = s:move_to_nearest_bracket(a:end)
+    endif
 
     " Handle opening bracket edge cases
     if !a:end && pos[1] > 0
@@ -1118,6 +1125,17 @@ function! sexp#insert_at_list_terminal(end)
         else
             normal! l
         endif
+    endif
+
+    " Handle closing bracket edge cases
+    if a:end && pos[1] > 0
+      let prevchar = getline(pos[1])[pos[2]-2]
+
+      if empty(prevchar)
+      elseif prevchar !~# '\v\s'
+        execute 'normal! i '
+        normal! l
+      endif
     endif
 
     startinsert
