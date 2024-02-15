@@ -78,6 +78,8 @@ let s:sexp_mappings = {
     \ 'sexp_curly_tail_wrap_element':   '<LocalLeader>e}',
     \ 'sexp_insert_at_list_head':       '<LocalLeader>h',
     \ 'sexp_insert_at_list_tail':       '<LocalLeader>l',
+    \ 'sexp_move_to_prev_bracket_or_stay': '',
+    \ 'sexp_move_to_next_bracket_or_stay': '',
     \ 'sexp_splice_list':               '<LocalLeader>@',
     \ 'sexp_convolute':                 '<LocalLeader>?',
     \ 'sexp_raise_list':                '<LocalLeader>o',
@@ -204,7 +206,7 @@ function! s:sexp_create_mappings()
 
     for plug in ['sexp_indent',              'sexp_indent_top',
                \ 'sexp_insert_at_list_head', 'sexp_insert_at_list_tail',
-	       \ 'sexp_convolute',           'sexp_splice_list']
+               \ 'sexp_convolute',           'sexp_splice_list']
         let lhs = get(g:sexp_mappings, plug, s:sexp_mappings[plug])
         if !empty(lhs)
             execute 'nmap <silent><buffer> ' . lhs . ' <Plug>(' . plug . ')'
@@ -379,6 +381,9 @@ Defplug  xnoremap sexp_curly_tail_wrap_element  sexp#wrap('v', '{', '}', 1, g:se
 " Insert at list terminal
 Defplug! nnoremap sexp_insert_at_list_head sexp#insert_at_list_terminal(0)
 Defplug! nnoremap sexp_insert_at_list_tail sexp#insert_at_list_terminal(1)
+
+Defplug! nnoremap sexp_move_to_next_bracket_or_stay sexp#move_to_next_bracket_or_stay()
+Defplug! nnoremap sexp_move_to_prev_bracket_or_stay sexp#move_to_prev_bracket_or_stay()
 
 " Raise list
 Defplug! nnoremap sexp_raise_list    sexp#docount(v:count, 'sexp#raise', 'n', 'sexp#select_current_list', 'n', 0, 0)

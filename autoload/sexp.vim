@@ -2340,3 +2340,21 @@ function! sexp#backspace_insertion()
         return "\<BS>"
     endif
 endfunction
+
+function! sexp#move_to_prev_bracket_or_stay()
+    let [_b, line, col, _o] = getpos('.')
+    let char = getline(line)[col - 1]
+
+    if (char !~# s:opening_bracket)
+      return s:move_to_nearest_bracket(0)
+    endif
+endfunction
+
+function! sexp#move_to_next_bracket_or_stay()
+    let [_b, line, col, _o] = getpos('.')
+    let char = getline(line)[col - 1]
+
+    if (char !~# s:closing_bracket)
+      return s:move_to_nearest_bracket(1)
+    endif
+endfunction
